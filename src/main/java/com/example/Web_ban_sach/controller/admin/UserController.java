@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.Web_ban_sach.domain.User;
+import com.example.Web_ban_sach.service.UploadService;
 import com.example.Web_ban_sach.service.UserService;
 
 import jakarta.servlet.ServletContext;
@@ -24,11 +25,11 @@ import org.springframework.ui.Model;
 @Controller
 public class UserController {
     private final UserService userService;
-    private final ServletContext servletContext;
+    private final UploadService uploadService;
 
-    public UserController(UserService userService, ServletContext servletContext) {
+    public UserController(UserService userService, UploadService uploadService) {
         this.userService = userService;
-        this.servletContext = servletContext;
+        this.uploadService = uploadService;
     }
 
     @RequestMapping("/")
@@ -65,28 +66,7 @@ public class UserController {
     public String createUserPage(Model model,
             @ModelAttribute("newUser") User user,
             @RequestParam("userFile") MultipartFile file) {
-
-        try {
-            byte[] bytes = file.getBytes();
-            String rootPath = this.servletContext.getRealPath("/resources/images");
-
-            File dir = new File(rootPath + File.separator + "avatar");
-            if (!dir.exists())
-                dir.mkdirs();
-
-            // Create the file on server
-            File serverFile = new File(dir.getAbsolutePath() + File.separator +
-                    +System.currentTimeMillis() + "-" + file.getOriginalFilename());
-
-            BufferedOutputStream stream = new BufferedOutputStream(
-                    new FileOutputStream(serverFile));
-            stream.write(bytes);
-            stream.close();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
+        String avata = this.uploadService.handleSaveLoadFile(file, "avatar");
         // this.userService.handleSaveUser(user);
         return "redirect:/admin/user";
 
