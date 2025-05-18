@@ -1,12 +1,35 @@
 package com.example.Web_ban_sach.domain;
 
+import java.util.List;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "users")
 public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String email;
     private String password;
     private String name;
     private String phone;
     private String address;
+    private String avatar;
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
+
+    @OneToMany(mappedBy = "user")
+    List<Order> orders;
 
     public long getId() {
         return id;
@@ -56,10 +79,34 @@ public class User {
         this.address = address;
     }
 
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
     @Override
     public String toString() {
         return "User [id=" + id + ", email=" + email + ", password=" + password + ", name=" + name + ", phone=" + phone
-                + ", address=" + address + "]";
+                + ", address=" + address + ", avatar=" + avatar + "]";
     }
 
 }
