@@ -11,9 +11,11 @@ import com.example.Web_ban_sach.domain.User;
 public interface UserRepository extends JpaRepository<User, Long> {
     User save(User user);
 
-    User findById(long id);
-
     void deleteById(long id);
 
-    List<User> findByEmail(String email);
+    List<User> findOneByEmail(String email);
+
+    List<User> findAll();
+
+    User findById(long id); // null
 }

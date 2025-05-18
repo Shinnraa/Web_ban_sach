@@ -4,38 +4,45 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.Web_ban_sach.domain.Role;
 import com.example.Web_ban_sach.domain.User;
+import com.example.Web_ban_sach.repository.RoleRepository;
 import com.example.Web_ban_sach.repository.UserRepository;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository,
+            RoleRepository roleRepository) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
 
-    public String handle() {
-        return "Hello World";
-    }
-
-    public List<User> getAllUser() {
+    public List<User> getAllUsers() {
         return this.userRepository.findAll();
+    }
+
+    public List<User> getAllUsersByEmail(String email) {
+        return this.userRepository.findOneByEmail(email);
+    }
+
+    public User handleSaveUser(User user) {
+        User eric = this.userRepository.save(user);
+        System.out.println(eric);
+        return eric;
     }
 
     public User getUserById(long id) {
         return this.userRepository.findById(id);
     }
 
-    public List<User> getAllUsersByEmail(String email) {
-        return this.userRepository.findByEmail(email);
-    }
-
-    public User handleSaveUser(User user) {
-        return this.userRepository.save(user);
-    }
-
-    public void DeleteAUser(long id) {
+    public void deleteAUser(long id) {
         this.userRepository.deleteById(id);
+    }
+
+    public Role getRoleByName(String name) {
+        return this.roleRepository.findByName(name);
     }
 }
